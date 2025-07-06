@@ -1,22 +1,23 @@
 # Arquivo de configuração "Blueprint" do Render
-# Coloque este arquivo na raiz do seu repositório
+# Este arquivo tem uma alta chance de ser validado.
+# Siga os passos manuais após o primeiro deploy.
 
 services:
-  # Configuração do Back-end (Serviço Web)
+  # 1. Configuração do Back-end (Serviço Web)
   - type: web
     name: vgc-generator-api
     env: node
-    region: ohio # Mudando para uma região comum para testar
+    region: ohio
     plan: free
     rootDir: backend
     buildCommand: "npm install"
     startCommand: "node server.js"
-    # Adicionando a versão do Node para garantir consistência
     envVars:
       - key: NODE_VERSION
         value: 18
 
-  # Configuração do Front-end (Site Estático)
+  # 2. Configuração do Front-end (Site Estático)
+  # A variável de ambiente será adicionada manualmente.
   - type: static_site
     name: vgc-generator-frontend
     region: ohio
@@ -28,9 +29,3 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
-    # Adicionando a variável de ambiente para conectar ao back-end
-    envVars:
-      - key: REACT_APP_API_URL
-        fromService:
-          type: web
-          name: vgc-generator-api
