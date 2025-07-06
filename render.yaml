@@ -7,7 +7,33 @@ services:
     name: vgc-generator-api
     env: node
     region: oregon # Sinta-se à vontade para mudar para a região mais próxima
+    plan: free # Arquivo de configuração "Blueprint" do Render
+# Coloque este arquivo na raiz do seu repositório
+
+services:
+  # Configuração do Back-end (Serviço Web)
+  - type: web
+    name: vgc-generator-api
+    env: node
+    region: oregon # Sinta-se à vontade para mudar para a região mais próxima
     plan: free 
+    rootDir: backend 
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+
+  # Configuração do Front-end (Site Estático)
+  - type: static_site # CORREÇÃO: O tipo correto é "static_site"
+    name: vgc-generator-frontend
+    region: oregon
+    plan: free
+    rootDir: frontend 
+    buildCommand: "npm install && npm run build"
+    publishDir: build 
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
     rootDir: backend 
     buildCommand: "npm install"
     startCommand: "node server.js"
