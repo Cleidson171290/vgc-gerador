@@ -1,0 +1,28 @@
+# Arquivo de configuração "Blueprint" do Render
+# Coloque este arquivo na raiz do seu repositório
+
+services:
+  # Configuração do Back-end (Serviço Web)
+  - type: web
+    name: vgc-generator-api
+    env: node
+    region: oregon # Você pode escolher a região mais próxima, ex: ohio
+    plan: free # Plano gratuito
+    rootDir: backend # <<< AQUI ESTÁ A DIRETIVA DE DIRETÓRIO RAIZ!
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    healthCheckPath: / # O Render pode verificar se o serviço está online
+
+  # Configuração do Front-end (Site Estático)
+  - type: static
+    name: vgc-generator-frontend
+    region: oregon
+    plan: free
+    rootDir: frontend # <<< DIRETIVA DE DIRETÓRIO RAIZ PARA O FRONT-END
+    buildCommand: "npm install && npm run build"
+    publishDir: build # A pasta que o Create React App gera
+    # Reescreve todas as rotas para index.html para que o roteamento do React funcione
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

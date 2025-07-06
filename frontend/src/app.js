@@ -2,19 +2,21 @@ import React, { useState, useEffect, useCallback } from "react";
 import Loader from "./components/Loader";
 import PokemonCard from "./components/PokemonCard";
 
+// A URL do nosso servidor back-end.
+// O Vercel/Render injetará a variável de ambiente. Para desenvolvimento local, usamos localhost.
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+
 function App() {
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Agora a função busca os dados do nosso próprio back-end
   const generateTeam = useCallback(async () => {
     setLoading(true);
     setError(null);
     setTeam([]);
     try {
-      // A URL do nosso servidor back-end
-      const response = await fetch("http://localhost:3001/api/generate-team");
+      const response = await fetch(`${API_URL}/api/generate-team`);
       if (!response.ok) {
         throw new Error("A resposta da rede não foi ok");
       }
